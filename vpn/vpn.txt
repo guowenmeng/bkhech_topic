@@ -1,0 +1,3 @@
+https://oo.kingnet.com/pac/use.pac
+
+file://D:\vpn\use.pac
