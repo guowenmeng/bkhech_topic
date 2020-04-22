@@ -1,0 +1,100 @@
+安装在centos7  64位。docker有一个要求 系统内核要求在3.10以上。
+1.如何查看系统内核？
+	uname -r
+
+2.安装命令
+	yum -y install docker-io
+
+3.安装完后，启动
+	service docker start
+
+4.启动后，查看是否启动，查看版本
+	docker version
+
+5.入门例子，我们用一个安装nginx来体验
+	docker run -p 80:80 -d nginx
+	
+	
+补充：
+docker升级
+前言：
+ docker的版本分为社区版docker-ce和企业版dokcer-ee社,区版是免费提供给个人开发者和小型团体使用的，企业版会提供额外的收费服务，
+ 比如经过官方测试认证过的基础设施、容器、插件,当然docker的版本更新比较快。本文介绍如何完全的卸载老版本以及安装新版本docker。
+ 
+ 总体步骤：
+ 1.删除老版本
+ 2.安装新版本
+ 
+1.删除老版本
+ 1)停止docker服务
+	systemctl stop docker
+	
+ 2)查看当前版本
+	rpm -qa | grep docker
+	
+	注：
+	2.1)rpm使用 https://www.cnblogs.com/ftl1012/p/rpm.html
+	
+	2.2)最佳实践1：查询一个包是否被安装
+	# rpm -q < rpm package name>
+	
+	列出所有被安装的rpm package
+	# rpm -qa <package name>
+	
+	2.3)最佳实践2：rpm –qa
+	–a选项是查询所有已经安装的软件包。
+
+	-q是查询一个包是否安装
+
+	（显示区别：已经安装的rpm包不会显示后缀.rpm ，而未安装的包则显示后缀.rpm）
+
+	一般查询一个安装包是否安装的的命令为：
+	例如：rpm -qa | grep screen
+	
+ 3)卸载软件包
+	yum erase docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-selinux \
+                  docker-engine-selinux \
+                  docker-engine \
+                  docker-ce
+
+ 4)删除相关配置文件
+	注：主机上的图像，容器，卷或自定义配置文件不会自动删除。要删除所有图像，容器和卷，该操作将清理主机上的所有docker配置和文件，请谨慎操作,删除后要重新加载docker (systemctl restart docker)
+	find /etc/systemd -name '*docker*' -exec rm -f {} \;
+	find /etc/systemd -name '*docker*' -exec rm -f {} \;
+	find /lib/systemd -name '*docker*' -exec rm -f {} \;
+	rm -rf /var/lib/docker   #删除以前已有的镜像和容器,非必要
+	rm -rf /var/run/docker  
+	
+2.安装新版本
+ 1)软件包安装
+	yum install -y yum-utils  device-mapper-persistent-data lvm2
+ 
+ 2)添加yum源
+	yum-config-manager \
+		--add-repo \
+		https://download.docker.com/linux/centos/docker-ce.repo
+		
+ 3)查看可安装的版本
+	yum list docker-ce --showduplicates | sort -r
+
+ 4)安装最新版本
+	yum install docker-ce -y
+ 5)启动, 开机自启, 并查看启动状态
+	systemctl start docker  #启动docker
+	systemctl enable docker #设置开机启动
+	systemctl status docker #查看启动状态
+ 6)查看docker版本
+	docker version 
+
+参考：https://juejin.im/post/5c35c7496fb9a049e93ceb83
+	
+	
+
+
