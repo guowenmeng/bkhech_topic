@@ -1,0 +1,59 @@
+jps
+
+查看堆内存使用情况：
+jmap -heap 1
+
+jhsdb jmap --heap --pid 1
+
+
+jmap -histo:live 1| head -n 30
+
+
+jmap -dump:live,format=b,file=heap.hprof 1
+
+jmap -dump:format=b,file=heap001.hprof 1
+
+垃圾收集统计摘要:
+
+jstat -gcutil  pid interval times
+
+jstat -gcutil 1294 1000 5
+
+查看gc发生的详细原因：
+jstat -gccause pid interval times
+
+
+类加载信息相关
+
+jstat -class 1
+
+
+
+至于JVM默认启动参数，可以通过命令
+java -XX:+PrintCommandLineFlags -version
+
+
+---------------------------------
+查看运行时所有参数：
+java -XX:+PrintFlagsFinal -version
+
+
+查看运行中java设置的所有修改的参数：
+jinfo -flags 1
+
+查看运行中的java实例某个参数：
+jinfo -flag InitialHeapSize 1
+jinfo -flag MaxHeapSize 1
+------------------------------
+
+
+查看Eden 和 两个 Survivor 区域比例：
+jinfo -flag SurvivorRatio 1
+
+查看新生代 ( Young ) 与老年代 ( Old ) 的比例:
+jinfo -flag NewRatio 1 
+
+
+
+
+-XX:NativeMemoryTracking=detail
