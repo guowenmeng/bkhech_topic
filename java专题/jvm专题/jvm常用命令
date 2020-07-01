@@ -1,5 +1,10 @@
 jps
 
+当前jvm线程数统计：
+jstack 3893 |grep 'tid'| wc -l  (linux 64位系统中jvm线程默认栈大小为1MB)
+jstack 1 |grep 'tid'| wc -l
+
+
 查看堆内存使用情况：
 jmap -heap 1
 
@@ -44,6 +49,7 @@ jinfo -flags 1
 查看运行中的java实例某个参数：
 jinfo -flag InitialHeapSize 1
 jinfo -flag MaxHeapSize 1
+jinfo -flag NativeMemoryTracking 1
 ------------------------------
 
 
@@ -55,5 +61,20 @@ jinfo -flag NewRatio 1
 
 
 
+堆外内存
 
--XX:NativeMemoryTracking=detail
+因为通常的垃圾收集日志等记录，并不包含 Direct Buffer 等信息，所以 Direct Buffer 内存诊断也是个比较头疼的事情。
+在 JDK 8 之后的版本，使用 Native Memory Tracking （ NMT ）特性来进行诊断，你可以在程序启动时加上下面参数：
+-XX:NativeMemoryTracking={off|summary|detail}
+# off: 默认关闭
+# summary: 只统计各个分类的内存使用情况.
+# detail: Collect memory usage by individual call sites.
+
+// 打印 NMT 信息
+jcmd <pid> VM.native_memory detail
+
+// 进行 baseline，以对比分配内存变化
+jcmd <pid> VM.native_memory baseline
+
+// 进行 diff，对比分配内存变化
+jcmd <pid> VM.native_memory detail.diff
