@@ -1,0 +1,37 @@
+1. 构建镜像
+  docker build -t guowm_open_admin_web:1.0.0 .
+  其中 -t 对镜像进行命名，一般的命名法：仓库名字/镜像名字：版本号
+  注意：其中 .号，代表当前目录下的dockerfile文件。
+
+2. 查看本地镜像
+  docker images | grep guowm_open
+  
+3. 启动镜像
+  docker run -d -p 52001:8080 --name=guowm_open_admin_web guowm_open_admin_web:1.0.0
+
+4. 查看日志
+ docker logs -f id;
+ 
+ 
+5.指定redis-cli
+docker exec -it redis-test redis-cli 192.168.71.29
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+docker build -t guowm_battle_hobby_admin:1.0.0 .
+docker run -d -p 52002:18888 --name=guowm_battle_hobby_admin guowm_battle_hobby_admin:1.0.0
