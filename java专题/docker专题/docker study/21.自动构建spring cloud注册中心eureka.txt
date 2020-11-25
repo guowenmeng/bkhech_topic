@@ -1,6 +1,6 @@
 1.compose 内容
 ================================================================
-#docker compse 的配置文件包含3大部分：version services networks
+#docker compose 的配置文件包含3大部分：version services networks
 version: '3'
 services:
   # 服务名称
