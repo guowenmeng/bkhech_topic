@@ -33,5 +33,5 @@ docker exec -it redis-test redis-cli 192.168.71.29
 
 
 
-docker build -t guowm_battle_hobby_admin:1.0.0 .
-docker run -d -p 52002:18888 --name=guowm_battle_hobby_admin guowm_battle_hobby_admin:1.0.0
+docker build -t guowm_friends_web:1.0.0 .
+docker run -d -p 52002:18888 --name=guowm_friends_web --privileged=true guowm_friends_web:1.0.0

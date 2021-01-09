@@ -1,13 +1,27 @@
 jps
 
-当前jvm线程数统计：
-jstack 3893 |grep 'tid'| wc -l  (linux 64位系统中jvm线程默认栈大小为1MB)
-jstack 1 |grep 'tid'| wc -l
+当前jvm 1 线程数统计：
+jstack 1 |grep 'tid'| wc -l  (linux 64位系统中jvm线程默认栈大小为1MB)
+
+
+查看进程 1 中线程状态统计
+jstack 1 | grep java.lang.Thread.State | awk '{print $2}' | sort | uniq -c
+
+或者
+jstack 1 > stack.txt (方便分析)
+cat stack.txt | grep 'tid'| wc -l
+cat stack.txt | grep java.lang.Thread.State | awk '{print $2}' | sort | uniq -c
 
 
 查看堆内存使用情况：
+JDK9之前：
 jmap -heap 1
 
+若报错：
+解决：https://blog.csdn.net/whq12789/article/details/98941294
+http://debuginfo.centos.org/7/x86_64/java-1.8.0-openjdk-debuginfo-1.8.0.212.b04-0.el7_6.x86_64.rpm
+
+JDK9及之后：
 jhsdb jmap --heap --pid 1
 
 
@@ -22,11 +36,17 @@ jmap -dump:format=b,file=heap001.hprof 1
 
 jstat -gcutil  pid interval times
 
-jstat -gcutil 1294 1000 5
+jstat -gcutil 1 1000 20
 
 查看gc发生的详细原因：
 jstat -gccause pid interval times
 
+
+gc日志输出到文件
+-XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:gc.log
+
+内存溢出时，堆栈信息输出到文件
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/heap.hprof
 
 类加载信息相关
 
@@ -49,7 +69,10 @@ jinfo -flags 1
 查看运行中的java实例某个参数：
 jinfo -flag InitialHeapSize 1
 jinfo -flag MaxHeapSize 1
+jinfo -flag UseCompressedOops 1
 jinfo -flag NativeMemoryTracking 1
+
+jinfo -flag UseG1GC 1
 ------------------------------
 
 
@@ -60,8 +83,18 @@ jinfo -flag SurvivorRatio 1
 jinfo -flag NewRatio 1 
 
 
+docker环境检查占用cpu飙升的异常java服务
+1.docker status 命令查看服务资源占用情况 获取cpu异常的容器id 60a01eab867b
+2.docker exec -it 60a01eab867b /bin/bash 命令进入容器
+3.top 命令查看该容器线程占用最高的进程PID 1
+4.ps -mp 1 -o THREAD,tid,time 命令获取到1这个进程下面所有线程，通过查看%CPU找到最耗费CPU的线程TID 112（或者使用命令 top -Hp 1）
+5.printf '%x' 112 命令转换成对应的16进制PID 70(112为上一步中获取到的线程TID )
+6.jstack 1 | grep 70 -A 30 命令查看异常信息 注意：1是一开始获取的进程PID,而70则是这个进程下面最耗费CPU的线程TID
+7.jstack 1>stack.txt 命令，将该消耗进程的线程相关信息导出到stack.text文件中，打开这个文件查看每个线程的具体状态然后分析代码异常
 
-堆外内存
+
+
+堆外内存 jcmd
 
 因为通常的垃圾收集日志等记录，并不包含 Direct Buffer 等信息，所以 Direct Buffer 内存诊断也是个比较头疼的事情。
 在 JDK 8 之后的版本，使用 Native Memory Tracking （ NMT ）特性来进行诊断，你可以在程序启动时加上下面参数：
@@ -78,3 +111,50 @@ jcmd <pid> VM.native_memory baseline
 
 // 进行 diff，对比分配内存变化
 jcmd <pid> VM.native_memory detail.diff
+
+
+jcmd 6 VM.native_memory summary
+
+系统层面内存分析策略：
+
+https://copyfuture.com/blogs-details/20190811152052100jam7iw5128mxs5h
+
+查看系统内存概况 top/free
+
+
+查看进程的内存概况  pmap
+1. pmap -x 1 
+
+2. 每隔两秒钟打印总的内存占用量：
+while true; do pmap -x  28056 | tail -1; sleep 2; done
+
+列举出正在使用的文件 lsof
+
+https://blog.csdn.net/iteye_8381/article/details/82485392
+
+1. 列出所有tcp 网络连接信息: lsof -i tcp
+2. 显示某个进程号下打开的文件量: lsof -p processId. 例如： lsof -p 1
+
+
+
+题外篇：
+Ubuntu
+
+https://www.cnblogs.com/rayoo/p/10927572.html
+
+替换软件源：
+
+mv sources.list sources.list_bak
+echo "deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse" > sources.list
+sudo apt-get update
+sudo apt-get upgrade
+
+安装网络工具包：
+apt install net-tools
+
+
+
+线上配置
+
+Command line:  -Xms10240m -Xmx10240m -XX:+UseG1GC  -XX:NewRatio=1
+-javaagent:/data/agent/skywalking-agent.jar -Dspring.profiles.active=prod -Duser.timezone=Asia/Shanghai
