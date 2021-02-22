@@ -156,5 +156,5 @@ apt install net-tools
 
 线上配置
 
-Command line:  -Xms10240m -Xmx10240m -XX:+UseG1GC  -XX:NewRatio=1
+Command line:  -Xms10240m -Xmx10240m -XX:+UseG1GC -XX:NewRatio=1
 -javaagent:/data/agent/skywalking-agent.jar -Dspring.profiles.active=prod -Duser.timezone=Asia/Shanghai
