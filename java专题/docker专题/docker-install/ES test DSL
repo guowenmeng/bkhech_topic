@@ -1,0 +1,242 @@
+
+
+
+
+
+GET /dc_game_resource/_search
+
+GET /_analyze
+{
+  "text": ["谁说的王者风华"],
+  "analyzer": "ik_max_word"
+}
+
+
+GET /dc_game_resource/_search
+{
+    "query":{
+        "bool":{
+            "must":[
+                {
+                    "match":{
+                        "gameAliasName":{
+                            "query":"星闪",
+                            "operator":"OR",
+                            "prefix_length":0,
+                            "max_expansions":50,
+                            "fuzzy_transpositions":true,
+                            "lenient":false,
+                            "zero_terms_query":"NONE",
+                            "auto_generate_synonyms_phrase_query":true,
+                            "boost":1
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "_source":{
+        "includes":[
+            "gameId", "gameName", "gameAliasName"
+        ]
+    }
+}
+
+
+GET /_cat/indices
+
+GET /dc_game_resource/_mapping
+
+DELETE /dc_game_resource
+
+PUT /dc_game_resource/
+{
+  "mappings" : {
+      "demon_assistant" : {
+        "properties" : {
+          "gameAliasName" : {
+            "type" : "text",
+            "analyzer" : "ik_max_word"
+          },
+          "gameName" : {
+            "type" : "text",
+            "analyzer" : "ik_max_word"
+          },
+          "gameId" : {
+            "type" : "long"
+          }
+        }
+      }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GET _search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /_cat/indices
+
+GET /_analyze
+{
+  "analyzer": "ik_smart",
+  "text": ["帝者5"]
+}
+
+
+GET mrlx_player_login/_mapping
+
+GET mrlx_player_login/_search
+{
+  "query": {
+    "match": {
+      "nickName": {
+        "query": "帝都5"
+      }
+    }
+  }
+}
+
+GET mrlx_player_login/_search
+{
+  "query": {
+    "term": {
+      "nickName.keyword": {
+        "value": "帝者仙4"
+      }
+    }
+  }
+}
+
+GET mrlx_player_login/_search
+{
+  "post_filter" : {
+    "bool" : {
+      "must" : [
+        {
+          "term" : {
+            "channelId" : {
+              "value" : "1",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+          "term" : {
+            "action" : {
+              "value" : "login",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+          "term" : {
+            "serverId" : {
+              "value" : "3",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+                    "term":{
+                        "nickName.keyword":{
+                            "value":"帝者仙",
+                            "boost":1
+                        }
+                    }
+                }
+      ]
+    }
+  }
+}
+
+GET /my_store/_mapping
+
+GET /my_store/_search
+{
+  "query": {
+    "term": {
+      "name.keyword": {
+        "value": "XHDK-A-1293-#fJ3"
+      }
+    }
+  }
+}
+
+
+DELETE /my_store/
+
+PUT /my_store
+
+PUT /my_store/_mapping/products?pretty
+{
+  "properties": {
+    "price": {
+      "type": "long"
+    },
+    "name": {
+      "type": "text"
+    },
+    "owner": {
+      "type": "nested",
+      "properties": {
+        "name": {
+          "type": "text"
+        },
+        "age": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}
+
+POST /my_store/products/_bulk
+{ "index": { "_id": 1 }}
+{ "price" : 10, "name" : "XHDK-A-1293-#fJ3","owner":{"name" :"西安","age":30}}
+{ "index": { "_id": 2 }}
+{ "price" : 20, "name" : "KDKE-B-9947-#kL5" ,"owner":{"name" :"西安","age":50}}
+{ "index": { "_id": 3 }}
+{ "price" : 30, "name" : "JODL-X-1937-#pV7","owner":{"name" :"榆林","age":20} }
+{ "index": { "_id": 4 }}
+{ "price" : 40, "name" : "QQPX-R-3956-#aD8","owner":{"name" :"榆林","age":10} }
+
+
+ PUT /my_s*/_mapping/products
+    {
+      "properties" : {
+          "name" : {
+            "type" : "text",
+             "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          }
+        }
+    }
+
+
+

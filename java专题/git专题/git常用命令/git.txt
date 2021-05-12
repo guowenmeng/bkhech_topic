@@ -1,0 +1,19 @@
+1.git 查看本地分支和远程分支差异
+
+假设远端库名是 origin，你要比较的本地分支为 test，远端分支就是 xxx
+
+比较本地分支的话，直接git diff branchA branchB
+远程分支的话，git diff branchA remoteB/branchB
+区别就是远程分支前面要加上remote名称/，没其他的区别
+
+2.使用 git commit -m 'cccc', 报错：Your branch is ahead of 'origin/master' by 2 commits.
+
+解决： 加上-a 参数 
+例如：git commit -a -m 'ccc'
+
+3.查看本地待push的commit记录
+
+git cherry -v
+
+4.Git的撤销上次commit操作
+git commit --amend

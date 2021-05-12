@@ -1,0 +1,21 @@
+docker run -d -p 9200:9200 -p 9300:9300 --name myes-5.6.4 7a047c21aa48
+
+
+docker run --name kibana-5.6.4 -e ELASTICSEARCH_URL=http://192.168.202.100:9200 -p 5601:5601 -d 8c050dd75a9c
+
+
+
+docker run --name logstash-5.6.4 -d 237fefafdf2b
+docker cp 2a1bb7f2e810:/usr/share/logstash/config /opt/elk/logstash/config
+
+docker run --name logstash-5.6.4 -v /opt/elk/logstash/config:/usr/share/logstash/config -d 237fefafdf2b -f /usr/share/logstash/config/logstash.conf
+
+
+
+
+进入容器
+  docker exec -it 2a1bb7f2e810 /bin/bash
+
+查看日志
+docker logs -f containerid
+ 
