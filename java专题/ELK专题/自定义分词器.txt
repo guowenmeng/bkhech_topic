@@ -1,0 +1,128 @@
+DELETE /game_tag_relation_v1
+
+PUT /game_tag_relation_v1
+{
+  "settings": {
+     "analysis":{
+        "analyzer":{
+            "comma_analyzer":{
+                "type":"pattern",
+                "pattern":",",
+                "lowercase":false
+            }
+        }
+    }
+  },
+  "mappings" : {
+      "properties" : {
+        "PK" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "concatTagId" : {
+          "type" : "text",
+          "analyzer": "comma_analyzer",
+          "search_analyzer": "comma_analyzer"
+        },
+        "concatTypeId" : {
+          "type" : "text",
+          "analyzer": "comma_analyzer",
+          "search_analyzer": "comma_analyzer"
+        },
+        "delTag" : {
+          "type" : "long"
+        },
+        "gameAddTime" : {
+          "type" : "long"
+        },
+        "gameDimensionPlay" : {
+          "type" : "text",
+          "analyzer": "comma_analyzer",
+          "search_analyzer": "comma_analyzer"
+        },
+        "gameDimensionPoint" : {
+          "type" : "text",
+          "analyzer": "comma_analyzer",
+          "search_analyzer": "comma_analyzer"
+        },
+        "gameDimensionTheme" : {
+          "type" : "text",
+          "analyzer": "comma_analyzer",
+          "search_analyzer": "comma_analyzer"
+        },
+        "gameDownCount" : {
+          "type" : "long"
+        },
+        "gameId" : {
+          "type" : "long"
+        },
+        "gameScore" : {
+          "type" : "float"
+        },
+        "isMod" : {
+          "type" : "long"
+        }
+      }
+    }
+}
+
+
+GET game_tag_relation_v1/_analyze
+{
+  "text": ["118,85,46,26,23"],
+  "analyzer": "comma_analyzer"
+}
+
+
+GET /game_tag_relation_v1/_settings
+
+GET /game_tag_relation_v1/_mapping
+
+GET /game_tag_relation_v1/_search
+
+
+GET /game_tag_relation_v1/_search
+{
+  "query": {
+    "term": {
+      "concatTagId": "49"
+    }
+  }
+}
+
+
+
+GET /game_tag_relation_v1/_search
+{
+  "from" : 0,
+  "size" : 30,
+  "query" : {
+    "bool" : {
+      "must" : [
+        {
+          "term" : {
+            "concatTagId" : {
+              "value" : 49,
+              "boost" : 1.0
+            }
+          }
+        }
+      ],
+      
+      "boost" : 1.0
+    }
+  },
+  "sort" : [
+    {
+      "gameDownCount" : {
+        "order" : "desc"
+      }
+    }
+  ]
+}
+

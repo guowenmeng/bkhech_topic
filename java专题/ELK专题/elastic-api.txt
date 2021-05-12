@@ -1,0 +1,366 @@
+﻿#查看集群健康状况
+GET _cluster/health
+
+#查看所有索引
+GET /_cat/indices
+
+
+GET /mrsj_player_login/_search
+
+GET /mrsj_player_login/_search
+{
+  "from": 20,
+  "size": 40,
+  "query": {
+    "wildcard": {
+      "log": {
+        "value": "*error*"
+      }
+    }
+  }
+}
+
+
+#查看创建的索引定义mapping(相当于表结构)
+GET /mrsj_player_login/_mapping
+
+#最好一个索引下，对应一个type
+#删除索引
+DELETE /mrsj_player_login
+
+# 手动创建索引（自定义），在请求体里面传入设置或类型映射json
+PUT /mrsj_player_login
+{
+  "mappings": {
+      "game_player_action": {
+        "properties": {
+          "action": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "channelId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "createAt": {
+            "type": "long"
+          },
+          "data_areaId": {
+            "type": "long"
+          },
+          "data_areaName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_banTime": {
+            "type": "long"
+          },
+          "data_campId": {
+            "type": "long"
+          },
+          "data_campName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_createTime": {
+            "type": "long"
+          },
+          "data_deviceId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_deviceType": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_frozenTime": {
+            "type": "long"
+          },
+          "data_heroCount": {
+            "type": "long"
+          },
+          "data_ip": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_mainBuildingLevel": {
+            "type": "long"
+          },
+          "data_mainCityPosition": {
+            "type": "long"
+          },
+          "data_maxHeroLevel": {
+            "type": "long"
+          },
+          "data_osVersion": {
+            "type": "long"
+          },
+          "data_power": {
+            "type": "long"
+          },
+          "data_userLevel": {
+            "type": "long"
+          },
+          "data_vipLevel": {
+            "type": "long"
+          },
+          "gameId": {
+            "type": "long"
+          },
+          "id": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "platform": {
+            "type": "long"
+          },
+          "playerId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "playerName": {
+             "type":"keyword",
+             "ignore_above":2048
+          },
+          "realChannelId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "serverId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "uniqueId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      }
+    }
+}
+
+
+GET /mrsj_player_modify_name/_mapping
+
+DELETE /mrsj_player_modify_name
+
+PUT /mrsj_player_modify_name
+{
+  "mappings": {
+      "game_player_action": {
+        "properties": {
+          "action": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "channelId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "createAt": {
+            "type": "long"
+          },
+          "data_areaId": {
+            "type": "long"
+          },
+          "data_areaName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_banTime": {
+            "type": "long"
+          },
+          "data_campId": {
+            "type": "long"
+          },
+          "data_campName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_deviceId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_deviceType": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_ip": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_osVersion": {
+            "type": "long"
+          },
+          "data_newPlayerName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "data_oldPlayerName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "gameId": {
+            "type": "long"
+          },
+          "id": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "platform": {
+            "type": "long"
+          },
+          "playerId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "playerName": {
+             "type":"keyword",
+             "ignore_above":2048
+          },
+          "realChannelId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "serverId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "uniqueId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      }
+    }
+}
