@@ -26,12 +26,16 @@ docker exec -it redis-test redis-cli 192.168.71.29
 
 
 
+docker run -d --name nginx_local_web -p 52080:80 -v /home/guowm/data/nginx/logs:/var/log/nginx -v /home/guowm/data/nginx/conf:/etc/nginx -v /home/guowm/data/nginx/html:/usr/share/nginx/html nginx
 
 
 
 
 
+docker build -t guowm_xxl_job_admin:2.3.0 .
 
+docker images | grep guowm_xxl_job_admin
 
-docker build -t guowm_friends_web:1.0.0 .
-docker run -d -p 52002:18888 --name=guowm_friends_web --privileged=true guowm_friends_web:1.0.0
+docker run -d -p 52101:8080 -v /home/guowm/data/distributed-job/xxl-job-admin/logs/52101:/data/applogs --name=guowm_xxl_job_admin_52101 guowm_xxl_job_admin:2.3.0
+
+docker run -d -p 52102:8080 -v /home/guowm/data/distributed-job/xxl-job-admin/logs/52102:/data/applogs --name=guowm_xxl_job_admin_52102 guowm_xxl_job_admin:2.3.0

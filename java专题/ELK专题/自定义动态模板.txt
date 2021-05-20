@@ -1,0 +1,90 @@
+≤Œøº£∫https://www.jianshu.com/p/5c66654fb714
+
+
+GET /_template/test_user
+
+DELETE /_template/test_user
+
+PUT /_template/test_user
+ {
+    "order": 1,
+    "index_patterns": [
+        "test*",
+        "user*"
+    ],
+    "settings": {
+        "number_of_shards": 1
+    },
+    "mappings": {
+        "_doc": {
+          "dynamic_templates": [
+            {
+                "string_as_keyword": {
+                    "match_mapping_type": "long",
+                    "mapping": {
+                        "type": "integer"
+                    }
+                }
+            }
+        ],
+        "properties": {
+            "host_name": {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 128
+                  }
+                }
+            },
+            "created_at": {
+                "type": "date",
+                "format": "yyyy-MM-dd"
+            }
+        }
+        }
+    },
+    "aliases": {
+        "alias_name": {
+            "filter": {
+                "term": {
+                    "user": "tim"
+                }
+            },
+            "routing": "tim"
+        }
+    }
+}
+
+
+# ≤‚ ‘
+
+PUT test_1/_doc/1
+{
+  "host_name": "5", 
+  "host_name_1": 5, 
+  "my_string": "Some string",
+  "created_at": "2021-05-20"
+}
+
+GET /test_1/_mapping
+
+DELETE /test_1
+
+GET /test_1/_search
+
+
+
+PUT tes2t_1/_doc/1
+{
+  "host_name": "5", 
+  "host_name_1": 5, 
+  "my_string": "Some string",
+  "created_at": "2021-05-20"
+}
+
+GET /tes2t_1/_mapping
+
+DELETE /tes2t_1
+
+GET /tes2t_1/_search
