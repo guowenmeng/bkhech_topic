@@ -1,0 +1,29 @@
+
+1.只发布父工程pom到远程私服 
+	参数-N –non-recursive Do not recurse into sub-projects，意思是，不递归到子项目(子模块)。
+mvn clean deploy -U -Dgpg.skip -DskipTests -P release -N
+
+2.只发布xxl-job-core工程到远程私服 
+	-pl 指定发布子模块
+mvn clean deploy -U -Dgpg.skip -DskipTests -P release -pl xxl-job-core
+
+3.只发布xxl-job-spring-boot-starter工程到远程私服 
+	-pl 指定发布子模块
+mvn clean deploy -U -Dgpg.skip -DskipTests -P release -pl xxl-job-spring-boot-starter
+
+
+-U 强制更新
+
+
+
+
+
+
+
+
+
+
+
+mvnw clean install  -DskipTests -N
+mvnw clean install -pl xxl-job-core -DskipTests
+mvnw clean package -pl xxl-job-admin -DskipTests
