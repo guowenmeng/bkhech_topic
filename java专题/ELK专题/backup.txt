@@ -1,3 +1,5 @@
+GET /
+
 GET /_cat/indices
 
 
@@ -159,7 +161,5 @@ POST /my_store/_bulk
 { "price" : 30, "name" : "JODL-X-1937-#pV7","owner":{"name" :"”‹¡÷","age":20} }
 { "index": { "_id": 4 }}
 { "price" : 40, "name" : "QQPX-R-3956-#aD8","owner":{"name" :"”‹¡÷","age":10} }
-
-
 
 
