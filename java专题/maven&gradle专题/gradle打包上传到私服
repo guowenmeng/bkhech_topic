@@ -1,0 +1,34 @@
+//打包源代码
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+//如果希望gradle install，安装到.m2本地仓库，参考下面的内容
+install {
+    repositories.mavenInstaller {
+        pom.groupId = "$project.group"
+        pom.artifactId = "$artifactId"
+        pom.version = "$project.version"
+    }
+}
+
+// 上传Task，Gradle会生成并上传pom.xml文件。
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://nexus.abcs8.com/repository/wf/"){
+                authentication(userName:  "admin" , password:  "wufan@123" )
+            }
+            //构造项目的Pom文件
+            pom.groupId = "$project.group"
+            pom.artifactId = "$artifactId"
+            pom.version = "$project.version"
+        }
+
+    }
+}
