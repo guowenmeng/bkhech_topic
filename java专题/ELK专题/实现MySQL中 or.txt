@@ -1,0 +1,86 @@
+# or 方式一
+GET papa_user/_search
+{
+  "from" : 0,
+  "size" : 30,
+  "query" : {
+    "bool" : {
+      "must" : [
+        {
+          "term" : {
+            "mobile" : {
+              "value" : "13988030169",
+              "boost" : 1.0
+            }
+          }
+        }
+      ],
+      "should" : [
+        {
+          "wildcard" : {
+            "nickname" : {
+              "wildcard" : "bkh*",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+          "wildcard" : {
+            "account" : {
+              "wildcard" : "bkh*",
+              "boost" : 1.0
+            }
+          }
+        }
+      ],
+      "adjust_pure_negative" : true,
+      "minimum_should_match" : "1",
+      "boost" : 1.0
+    }
+  }
+}
+
+# or 方式二
+GET papa_user/_search
+{
+  "from" : 0,
+  "size" : 30,
+  "query" : {
+    "bool" : {
+      "must" : [
+        {
+          "term" : {
+            "mobile" : {
+              "value" : "13988030169",
+              "boost" : 1.0
+            }
+          }
+        },
+        {
+          "bool": {
+            "should" : [
+              {
+                "wildcard" : {
+                  "nickname" : {
+                    "wildcard" : "bkhc*",
+                    "boost" : 1.0
+                  }
+                }
+              },
+              {
+                "wildcard" : {
+                  "account" : {
+                    "wildcard" : "bkh*",
+                    "boost" : 1.0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "adjust_pure_negative" : true,
+      "boost" : 1.0
+    }
+  }
+}

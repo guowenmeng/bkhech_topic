@@ -1,0 +1,104 @@
+GET /mg_main_db_only_simulator/_search
+{
+  "from" : 0,
+  "size" : 20,
+  "query" : {
+    "function_score" : {
+      "query" : {
+        "bool" : {
+          "must" : [
+            {
+              "term" : {
+                "sync_type" : {
+                  "value" : 0,
+                  "boost" : 1.0
+                }
+              }
+            },
+            {
+              "term" : {
+                "isModGame" : {
+                  "value" : 0,
+                  "boost" : 1.0
+                }
+              }
+            },
+            {
+              "term" : {
+                "wufun_an_display_area" : {
+                  "value" : 1,
+                  "boost" : 1.0
+                }
+              }
+            },
+            {
+              "bool" : {
+                "should" : [
+                  {
+                    "match" : {
+                      "by_name" : {
+                        "query" : "恐龙快打",
+                        "operator" : "OR",
+                        "prefix_length" : 0,
+                        "max_expansions" : 50,
+                        "fuzzy_transpositions" : true,
+                        "lenient" : false,
+                        "zero_terms_query" : "NONE",
+                        "boost" : 1.0
+                      }
+                    }
+                  },
+                  {
+                    "match" : {
+                      "game_name" : {
+                        "query" : "恐龙快打",
+                        "operator" : "OR",
+                        "prefix_length" : 0,
+                        "max_expansions" : 50,
+                        "fuzzy_transpositions" : true,
+                        "lenient" : false,
+                        "zero_terms_query" : "NONE",
+                        "boost" : 2.0
+                      }
+                    }
+                  }
+                ],
+                "disable_coord" : false,
+                "adjust_pure_negative" : true,
+                "boost" : 1.0
+              }
+            }
+          ],
+          "disable_coord" : false,
+          "adjust_pure_negative" : true,
+          "boost" : 1.0
+        }
+      },
+      "functions" : [
+        {
+          "filter" : {
+            "match_all" : {
+              "boost" : 1.0
+            }
+          },
+          "field_value_factor" : {
+            "field" : "down_count",
+            "factor" : 0.1,
+            "modifier" : "log1p"
+          }
+        }
+      ],
+      "score_mode" : "multiply",
+      "boost_mode" : "sum",
+      "max_boost" : 3.4028235E38,
+      "boost" : 1.0
+    }
+  },
+  "sort" : [
+    {
+      "_score" : {
+        "order" : "desc"
+      }
+    }
+  ]
+}
